@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Exam Login</title>
+<style>
+body{
+    font-family:Georgia;
+    background:#fff3e0;
+    margin:0;
+}
+.wrapper{
+    width:480px;
+    margin:50px auto;
+    background:#fff;
+    padding:35px;
+    border-radius:25px;
+}
+h1{
+    text-align:center;
+    color:#e65100;
+}
+input{
+    display:block;
+    width:100%;
+    padding:12px;
+    margin:7px 0 18px;
+    box-sizing:border-box;
+}
+.start{
+    width:100%;
+    padding:13px;
+    background:#ef6c00;
+    color:white;
+    border:0;
+    border-radius:20px;
+}
+.choice{
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    background:#ffe0b2;
+    border:0;
+    text-align:left;
+}
+.next{
+    padding:10px 20px;
+    background:#ef6c00;
+    color:white;
+    border:0;
+}
+#quizBox{display:none}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper" id="loginBox">
+<h1>Exam Login</h1>
+
+<label>Name</label>
+<input placeholder="Type your name">
+
+<label>Roll Number</label>
+<input type="number" placeholder="Type roll number">
+
+<label>Section</label>
+<input placeholder="Type section">
+
+<button class="start" onclick="launch()">Start Examination</button>
+</div>
+
+<div class="wrapper" id="quizBox">
+<h1>Web Examination</h1>
+<div id="questionBox"></div>
+<div id="answerBox"></div>
+<button class="next" onclick="forward()">Continue</button>
+<div id="score"></div>
+</div>
+
+<script>
+let questions=[
+{
+text:"What is the full form of HTML?",
+options:["Hyper Text Markup Language","High Text Machine Language","Hyperlink Machine Language","Home Markup Language"],
+correct:0
+},
+{
+text:"Which one is a stylesheet language?",
+options:["HTML","CSS","C++","SQL"],
+correct:1
+},
+{
+text:"Which language makes pages interactive?",
+options:["CSS","HTML","JavaScript","XML"],
+correct:2
+},
+{
+text:"Which symbol is a single-line comment?",
+options:["//","##","<!-- -->","/* */"],
+correct:0
+}
+];
+
+let position=0;
+let result=0;
+let choice;
+
+function launch(){
+    loginBox.style.display="none";
+    quizBox.style.display="block";
+    render();
+}
+
+function render(){
+    choice=undefined;
+    questionBox.innerHTML="<h2>"+questions[position].text+"</h2>";
+    answerBox.innerHTML="";
+
+    questions[position].options.forEach((item,i)=>{
+        let b=document.createElement("button");
+        b.className="choice";
+        b.innerText=item;
+
+        b.onclick=()=>{
+            choice=i;
+            document.querySelectorAll(".choice")
+            .forEach(x=>x.style.background="#ffe0b2");
+            b.style.background="#ff9800";
+        };
+
+        answerBox.appendChild(b);
+    });
+}
+
+function forward(){
+    if(choice===undefined){
+        alert("Please select one option");
+        return;
+    }
+
+    if(choice===questions[position].correct)
+        result++;
+
+    position++;
+
+    if(position<questions.length)
+        render();
+    else{
+        questionBox.innerHTML="<h2>Examination Finished</h2>";
+        answerBox.innerHTML="";
+        document.querySelector(".next").style.display="none";
+        score.innerHTML="<h2>Marks: "+result+"/4</h2>";
+    }
+}
+</script>
+
+</body>
+</html>

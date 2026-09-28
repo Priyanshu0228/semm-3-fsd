@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Quiz</title>
+<style>
+body{
+    font-family:Arial;
+    background:#d9efff;
+    margin:0;
+    padding:40px;
+}
+.box{
+    background:white;
+    max-width:500px;
+    margin:auto;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 15px #888;
+}
+input{
+    width:100%;
+    padding:10px;
+    margin:8px 0 15px;
+    box-sizing:border-box;
+}
+button{
+    padding:12px;
+    margin:5px 0;
+    border:0;
+    border-radius:5px;
+    cursor:pointer;
+}
+.start{
+    width:100%;
+    background:#1976d2;
+    color:white;
+}
+.option{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:#eee;
+}
+.next{
+    background:#1976d2;
+    color:white;
+}
+#quiz{display:none}
+</style>
+</head>
+
+<body>
+
+<div class="box" id="login">
+<h1>Student Login</h1>
+
+<label>Name</label>
+<input type="text" placeholder="Enter name">
+
+<label>Roll Number</label>
+<input type="number" placeholder="Enter roll number">
+
+<label>Section</label>
+<input type="text" placeholder="Enter section">
+
+<button class="start" onclick="start()">Start Quiz</button>
+</div>
+
+<div class="box" id="quiz">
+<h1>Online Quiz</h1>
+
+<div id="question"></div>
+<div id="options"></div>
+<button class="next" onclick="next()">Next</button>
+<h3 id="result"></h3>
+</div>
+
+<script>
+let q=[
+["What does HTML stand for?",["Hyper Text Markup Language","High Text Machine Language","Home Tool Markup Language","Hyperlink Text Language"],0],
+["Which language styles a webpage?",["HTML","CSS","Java","Python"],1],
+["Which language adds interaction?",["HTML","CSS","JavaScript","SQL"],2],
+["Which is a JavaScript comment?",["#","//","<!-- -->","**"],1]
+];
+
+let n=0,score=0,chosen=-1;
+
+function start(){
+    login.style.display="none";
+    quiz.style.display="block";
+    show();
+}
+
+function show(){
+    chosen=-1;
+    question.innerHTML="<h2>"+(n+1)+". "+q[n][0]+"</h2>";
+    options.innerHTML="";
+    q[n][1].forEach((x,i)=>{
+        let b=document.createElement("button");
+        b.className="option";
+        b.innerHTML=x;
+        b.onclick=()=>{
+            chosen=i;
+            document.querySelectorAll(".option").forEach(a=>a.style.background="#eee");
+            b.style.background="yellow";
+        };
+        options.appendChild(b);
+    });
+}
+
+function next(){
+    if(chosen<0){
+        alert("Select an answer");
+        return;
+    }
+    if(chosen==q[n][2]) score++;
+    n++;
+    if(n<q.length) show();
+    else{
+        question.innerHTML="";
+        options.innerHTML="";
+        document.querySelector(".next").style.display="none";
+        result.innerHTML="Quiz Completed! Score: "+score+"/"+q.length;
+    }
+}
+</script>
+
+</body>
+</html>

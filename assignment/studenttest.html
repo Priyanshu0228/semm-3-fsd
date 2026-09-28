@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Test</title>
+<style>
+body{
+    margin:0;
+    background:#222;
+    color:white;
+    font-family:Arial;
+}
+.card{
+    width:520px;
+    margin:60px auto;
+    background:#333;
+    padding:30px;
+    border-radius:8px;
+}
+h1{text-align:center;color:#00e5ff}
+input{
+    width:100%;
+    padding:12px;
+    margin:8px 0 15px;
+    box-sizing:border-box;
+}
+button{
+    border:0;
+    padding:12px;
+    cursor:pointer;
+}
+.begin{
+    width:100%;
+    background:#00bcd4;
+}
+.choice{
+    display:block;
+    width:100%;
+    margin:8px 0;
+    text-align:left;
+    background:#555;
+    color:white;
+}
+#game{display:none}
+#next{
+    background:#00bcd4;
+    margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="entry">
+<h1>STUDENT TEST</h1>
+
+<p>Student Name</p>
+<input id="name" placeholder="Enter name">
+
+<p>Roll Number</p>
+<input type="number" placeholder="Enter roll number">
+
+<p>Section</p>
+<input placeholder="Enter section">
+
+<button class="begin" onclick="beginTest()">BEGIN TEST</button>
+</div>
+
+<div class="card" id="game">
+<h1>WEB QUIZ</h1>
+<div id="q"></div>
+<div id="answers"></div>
+<button id="next" onclick="check()">NEXT</button>
+<h2 id="final"></h2>
+</div>
+
+<script>
+let questions=[
+["HTML is a?",["Programming language","Markup language","Database","Browser"],1],
+["CSS means?",["Computer Style Sheet","Cascading Style Sheets","Color Style System","Code Style Sheet"],1],
+["JavaScript is used for?",["Structure","Styling","Interaction","Storage"],2],
+["Correct comment?",["//","##","<!--","@@@"],0]
+];
+
+let index=0;
+let points=0;
+let selected=null;
+
+function beginTest(){
+    entry.style.display="none";
+    game.style.display="block";
+    displayQuestion();
+}
+
+function displayQuestion(){
+    selected=null;
+    q.innerHTML="<h2>"+questions[index][0]+"</h2>";
+    answers.innerHTML="";
+
+    questions[index][1].forEach((answer,i)=>{
+        let button=document.createElement("button");
+        button.className="choice";
+        button.textContent=answer;
+
+        button.onclick=function(){
+            selected=i;
+            document.querySelectorAll(".choice")
+            .forEach(x=>x.style.background="#555");
+            button.style.background="#008c9e";
+        };
+
+        answers.appendChild(button);
+    });
+}
+
+function check(){
+    if(selected===null){
+        alert("Select an answer");
+        return;
+    }
+
+    if(selected===questions[index][2]) points++;
+
+    index++;
+
+    if(index<questions.length)
+        displayQuestion();
+    else{
+        q.innerHTML="";
+        answers.innerHTML="";
+        document.getElementById("next").style.display="none";
+        final.innerHTML="Final Score: "+points+"/4";
+    }
+}
+</script>
+
+</body>
+</html>
